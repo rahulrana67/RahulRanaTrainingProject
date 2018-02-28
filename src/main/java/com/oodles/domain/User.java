@@ -3,9 +3,15 @@ package com.oodles.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+import com.oodles.domain.UserAddress;
+import com.oodles.domain.Role;
 
 @Entity
 public class User {
@@ -22,15 +28,23 @@ public class User {
 	
 	private String phoneNumber;
 	
-	private Date dob;
+	//private Date dob;
 	
 	private Boolean isActive = false;
 	
 	private String gender;
 	
 	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_Address_id")
+	private UserAddress userAddress;
 	
-	
+	public UserAddress getUserAddress() {
+		return userAddress;
+	}
+	public void setUserAddress(UserAddress userAddress) {
+		this.userAddress = userAddress;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -61,12 +75,12 @@ public class User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Date getDob() {
-		return dob;
-	}
-	public void setDob(Date dob) {
-		this.dob = dob;
-	}
+//	public Date getDob() {
+//		return dob;
+//	}
+//	public void setDob(Date dob) {
+//		this.dob = dob;
+//	}
 	public Boolean getIsActive() {
 		return isActive;
 	}
@@ -79,6 +93,4 @@ public class User {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	
-	
 }

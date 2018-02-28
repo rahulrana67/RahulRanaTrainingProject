@@ -7,12 +7,14 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.oodles.util.ResponseHandler;
+import com.oodles.dto.UserEditDTO;
 import com.oodles.domain.User;
 import com.oodles.dto.UserDTO;
 import com.oodles.mapping.URLMapping;
@@ -75,4 +77,13 @@ public class UserController
             return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, false, e.getMessage(), result);
         }
     }
+    
+    @RequestMapping(value = URLMapping.EDIT_USER_PROFILE, method = RequestMethod.PUT)
+	public ResponseEntity<Object> editUserProfile(@RequestBody UserEditDTO userEditDTO) {
+		if (userEditDTO.id == null) {
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "Id can not be null", userEditDTO);
+		}
+		ResponseEntity<Object> res = userService.editUserProfile(userEditDTO);
+		return res;
+	}
 }

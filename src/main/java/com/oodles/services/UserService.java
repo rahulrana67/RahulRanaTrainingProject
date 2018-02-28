@@ -5,11 +5,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.oodles.dto.UserEditDTO;
+
+
+import com.oodles.domain.UserAddress;
+import com.oodles.util.ResponseHandler;
 import com.oodles.domain.User;
 import com.oodles.dto.UserDTO;
 import com.oodles.repository.UserRepository;
+import com.oodles.repository.UserAddressRepository;
 
 
 @Service
@@ -17,6 +25,9 @@ public class UserService
 {
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserAddressRepository userAddressRepository;
 	
 	public Map<String,Object> saveUser(User user)
 	{
@@ -28,7 +39,7 @@ public class UserService
         usr.setEmail(user.getEmail());
         usr.setId(user.getId());
         usr.setName(user.getName());
-        usr.setDob(user.getDob());
+       // usr.setDob(user.getDob());
         usr.setGender(user.getGender());
         usr.setPhoneNumber(user.getPhoneNumber());
         userRepository.save(usr);
@@ -66,8 +77,43 @@ public class UserService
 
             
             result.put("isSuccess", isSuccess);
-            System.out.println("Market updated sucessfully");
+            System.out.println("User updated sucessfully");
 
             return result;
 	}
+	
+	
+	public ResponseEntity<Object> editUserProfile(UserEditDTO userEditDTO) {
+		Boolean isSuccess = true;
+		String massage = "Data is saved seccussfully";
+		User user = userRepository.findOne(userEditDTO.getId());
+		if (user == null) {
+			isSuccess = false;
+			massage = "Please enter valid id";
+			return ResponseHandler.generateResponse(HttpStatus.OK, isSuccess, massage, userEditDTO);
+		}
+		
+		user.setName(userEditDTO.getName());
+		user.setPhoneNumber(userEditDTO.getPhoneNumber());
+		//user.setDob(userEditDTO.getDob());
+		user.setGender(userEditDTO.getGender());
+		
+		UserAddress userAddress = user.getUserAddress();
+		if (userAddress == null) {
+			userAddress = new UserAddress();
+		}
+		userAddress.setCity(userEditDTO.getCity());
+		userAddress.setPlace(userEditDTO.getPlace());
+		userAddress.setState(userEditDTO.getState());
+		userAddressRepository.save(userAddress);
+		user.setUserAddress(userAddress);
+		//user.setIsProfileCompleted(true);
+		User savedUser = userRepository.save(user);
+		if (savedUser == null) {
+			isSuccess = false;
+			massage = "Data is not saved";
+		}
+		return ResponseHandler.generateResponse(HttpStatus.OK, isSuccess, massage, savedUser);
+	}
+	
 }
