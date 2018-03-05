@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oodles.repository.ExchangeCountryRepository;
+import com.oodles.constants.Message;
 //import com.oodles.service.ActivityService;
 //import com.accounts.constants.Message;
 //import com.oodles.domain.Country;
@@ -21,6 +22,9 @@ public class ExchangeService
 
 	@Autowired
     ExchangeCountryRepository exchangeCountryRepository;
+	
+	@Autowired
+	MessageService messageService;
 
 	public Map<String, Object> saveExchange(ExchangeCountry data) 
 	{
@@ -41,9 +45,11 @@ public class ExchangeService
                 LOGGER.info("Exchange country saved successfully {}", savedExchangeCountry);
                 isSuccess = true;
                 result.put("isSuccess", isSuccess);
+                result.put("message", messageService.getMessage(Message.SUCCESS));
                 return result;
             }
 
+            result.put("message", messageService.getMessage(Message.NOT_EXIST));
             result.put("isSuccess", isSuccess);
 
         }catch(Exception e)
@@ -73,7 +79,7 @@ public class ExchangeService
             //LOGGER.info("exchangeCountry.getTradeBlockDateTime()"+ exchangeCountry.getTradeBlockDateTime());
             isSuccess=true;
             result.put("isSuccess", isSuccess);
-            //result.put("message", messageService.getMessage(Message.SUCCESS));
+            result.put("message", messageService.getMessage(Message.SUCCESS));
             result.put("exchangeCountry", exchangeCountry);
             /*result.put("tradeBlockHours", exchangeCountry.getTradeBlockDateTime().getHours());
             result.put("tradeBlockMinutes", exchangeCountry.getTradeBlockDateTime().getMinutes());
@@ -85,7 +91,7 @@ public class ExchangeService
         }catch (Exception e) {
             LOGGER.warn(e.getMessage());
             result.put("isSuccess", isSuccess);
-         //   result.put("message", messageService.getMessage(Message.INTERNAL_SERVER_ERROR));
+            result.put("message", messageService.getMessage(Message.INTERNAL_SERVER_ERROR));
         }
 
         return result;		

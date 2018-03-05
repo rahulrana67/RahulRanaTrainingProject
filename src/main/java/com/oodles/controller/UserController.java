@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,9 +48,11 @@ public class UserController
     
     @RequestMapping(value=URLMapping.GET_USER, method= RequestMethod.GET)
 	public ResponseEntity<Object>getUserProfile() {
+    	LOGGER.info("==============================================new one");
+    	LOGGER.info("9900mmmmmmmmmmmmmmmm0");
 
-		LOGGER.info("getUserProfile ");//email);
-		 List<User>user=userService.getUser();
+    	LOGGER.info("9900mmmmmmmmmmmmmmmm0");
+    	List<User>user=userService.getUser();
 		if (user != null) 
 		{
 			return ResponseHandler.generateResponse(HttpStatus.OK, true, "User data is retrived", user);
@@ -74,6 +76,7 @@ public class UserController
             else
                 return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, false, result.get(message).toString(), result);
         } catch (Exception e) {
+        	LOGGER.warn("User Not Found++++++++++++++++++++++=========	");
             return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, false, e.getMessage(), result);
         }
     }

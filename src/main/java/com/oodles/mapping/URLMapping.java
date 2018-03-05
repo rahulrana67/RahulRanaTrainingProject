@@ -1,6 +1,6 @@
 package com.oodles.mapping;
 
-public class URLMapping 
+public class URLMapping
 {
 	public static final String ACCOUNTS_API_V1 ="/v1";
 	

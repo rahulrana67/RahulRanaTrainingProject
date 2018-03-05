@@ -14,6 +14,7 @@ import com.oodles.dto.RoleActivityDTO;
 import com.oodles.repository.RoleRepository;
 import com.oodles.repository.AcitvityRepository;
 import com.oodles.services.ActivityService;
+import com.oodles.constants.Message;
 import com.oodles.domain.Activity;
 import com.oodles.domain.Role;
 //import com.oodles.domain.User;
@@ -27,6 +28,9 @@ public class ActivityService
 	
 	@Autowired
 	AcitvityRepository activityRepository;
+	
+	@Autowired
+	MessageService messageService;
 	
 	Logger LOGGER=LoggerFactory.getLogger(ActivityService.class);
 	
@@ -49,7 +53,7 @@ public class ActivityService
                     if(activity == null){
                         LOGGER.info("No such activity found");
                         result.put("error",activityId);
-                       // result.put("message", messageService.getMessage(Message.ERROR));
+                        result.put("message", messageService.getMessage(Message.ERROR));
                         result.put("isSuccess", isSuccess);
                         return result;
                     }

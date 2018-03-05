@@ -10,5 +10,5 @@ public interface UserRepository extends JpaRepository<User, Serializable>
 {
 	
 	User findUserById(Long id);
-	User findUserByEmail(Long email);
+	User findUserByEmail(String email);
 }

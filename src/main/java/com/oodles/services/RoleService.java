@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oodles.repository.RoleRepository;
+import com.oodles.constants.Message;
 //import com.accounts.service.RoleService;
 import com.oodles.domain.Role;
 
@@ -18,6 +19,9 @@ public class RoleService
 	
 	@Autowired
 	RoleRepository roleRepository;
+	
+	@Autowired
+	MessageService messageService;
 	
 	Logger LOGGER=LoggerFactory.getLogger(RoleService.class);
 	
@@ -35,14 +39,14 @@ public class RoleService
 				roleRepository.save(r);
 				isSuccess = true;
 				LOGGER.info("Role saved successfully {}", roleName);
-				//result.put("message", messageService.getMessage(Message.SUCCESS));
+				result.put("message", messageService.getMessage(Message.SUCCESS));
 			}else {
-				//result.put("message", messageService.getMessage(Message.ALREADY_EXIST));
+				result.put("message", messageService.getMessage(Message.ALREADY_EXIST));
 			}
 		}
 		} catch(Exception e){
 			LOGGER.warn(e.getMessage());
-			//result.put("message", messageService.getMessage(Message.INTERNAL_SERVER_ERROR));
+			result.put("message", messageService.getMessage(Message.INTERNAL_SERVER_ERROR));
 		}
 		result.put("isSuccess", isSuccess);
 		return result;

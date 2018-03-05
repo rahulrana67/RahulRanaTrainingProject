@@ -4,16 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.oodles.dto.UserEditDTO;
-
-
+import com.oodles.exception.UserAlreadyExistsException;
 import com.oodles.domain.UserAddress;
 import com.oodles.util.ResponseHandler;
+import com.oodles.constants.Message;
 import com.oodles.domain.User;
 import com.oodles.dto.UserDTO;
 import com.oodles.repository.UserRepository;
@@ -23,17 +25,41 @@ import com.oodles.repository.UserAddressRepository;
 @Service
 public class UserService 
 {
+	Logger LOGGER=LoggerFactory.getLogger(UserService.class);
+	
 	@Autowired
 	UserRepository userRepository;
 	
 	@Autowired
 	UserAddressRepository userAddressRepository;
 	
+	@Autowired
+	MessageService messageService;
+	
 	public Map<String,Object> saveUser(User user)
 	{
 		String user1 = user.getEmail();
 		System.out.println("----------------------------------------"+user1);
 		Map<String, Object> result = new HashMap<String, Object>();
+		User user2=userRepository.findUserByEmail(user.getEmail());
+		if(user2!=null)
+		{
+			try
+			{
+				throw new UserAlreadyExistsException("User already Exist");
+			}
+			
+			catch(UserAlreadyExistsException e)
+			{
+			LOGGER.info("Exception occured");
+			result.put("isSucces",false);
+			result.put("message", messageService.getMessage(Message.ALREADY_EXIST));//"User +++++++Already exist"
+			return result;
+			}
+			
+		}
+		else 
+		{
         Boolean isSuccess = false;
         User usr=new User();
         usr.setEmail(user.getEmail());
@@ -47,7 +73,9 @@ public class UserService
        
         	result.put("isSuccess", isSuccess);
         	result.put("data", usr);
+        	result.put("message", messageService.getMessage(Message.SUCCESS));
         	return result;
+		}
 	}
 	
 	public List<User> getUser() {
@@ -64,7 +92,7 @@ public class UserService
             
             if (usr == null) {
                 result.put("isSuccess", isSuccess);
-                //result.put("message", messageService.getMessage(Message.NOT_EXIST));
+                result.put("message", messageService.getMessage(Message.NOT_EXIST));
                 System.out.println("don't have user");
                 return result;
             }
@@ -77,6 +105,7 @@ public class UserService
 
             
             result.put("isSuccess", isSuccess);
+            result.put("message", messageService.getMessage(Message.SUCCESS));
             System.out.println("User updated sucessfully");
 
             return result;
@@ -85,12 +114,12 @@ public class UserService
 	
 	public ResponseEntity<Object> editUserProfile(UserEditDTO userEditDTO) {
 		Boolean isSuccess = true;
-		String massage = "Data is saved seccussfully";
+		String message = "Data is saved seccussfully";
 		User user = userRepository.findOne(userEditDTO.getId());
 		if (user == null) {
 			isSuccess = false;
-			massage = "Please enter valid id";
-			return ResponseHandler.generateResponse(HttpStatus.OK, isSuccess, massage, userEditDTO);
+			message = "Please enter valid id";
+			return ResponseHandler.generateResponse(HttpStatus.OK, isSuccess, message, userEditDTO);
 		}
 		
 		user.setName(userEditDTO.getName());
@@ -111,9 +140,9 @@ public class UserService
 		User savedUser = userRepository.save(user);
 		if (savedUser == null) {
 			isSuccess = false;
-			massage = "Data is not saved";
+			message = "Data is not saved";
 		}
-		return ResponseHandler.generateResponse(HttpStatus.OK, isSuccess, massage, savedUser);
+		return ResponseHandler.generateResponse(HttpStatus.OK, isSuccess, message, savedUser);
 	}
 	
 }

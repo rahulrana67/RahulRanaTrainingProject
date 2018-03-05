@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.oodles.repository.MarketRepository;
 import com.oodles.repository.ExchangeCountryRepository;
-
+import com.oodles.constants.Message;
 import com.oodles.domain.ExchangeCountry;
 import com.oodles.services.MarketService;
 import com.oodles.domain.Market;
@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
 public class MarketService {
 	@Autowired
 	MarketRepository marketRepository;
+	
+	@Autowired
+	MessageService messageService;
 	
 	Logger LOGGER = LoggerFactory.getLogger(MarketService.class);
 
@@ -36,8 +39,8 @@ public class MarketService {
 		if (exchangeCountry == null) {
 
 			LOGGER.info("Exchange Country doesnot exist========000000000");
-
 			result.put("isSuccess", false);
+			result.put("message", messageService.getMessage(Message.ERROR));
 			return result;
 		}
 
@@ -53,6 +56,7 @@ public class MarketService {
 			{
 				LOGGER.info("Market already exist+----------------------");
 				result.put("isSuccess", false);
+				result.put("message", messageService.getMessage(Message.ALREADY_EXIST));
 				return result;
 			}
 
@@ -69,6 +73,7 @@ public class MarketService {
 			LOGGER.warn(e.getMessage());
 			LOGGER.info("EXception--------------==========++++++++++");
 			result.put("isSuccess", false);
+			result.put("message", messageService.getMessage(Message.ERROR));
 		}
 
 		return result;
@@ -106,18 +111,19 @@ public class MarketService {
 		try {
 			if (market == null) {
 				result.put("isSuccess", isSuccess);
-
+				result.put("message", messageService.getMessage(Message.NOT_EXIST));
 				LOGGER.info("Don't have Market for this given Id ....");
 				return result;
 			}
 			isSuccess = true;
 			result.put("isSuccess", isSuccess);
-
+			result.put("message", messageService.getMessage(Message.SUCCESS));
 			LOGGER.info("Market details fetched successfully ....");
 			result.put("market", market);
 
 		} catch (Exception e) {
 			LOGGER.warn(e.getMessage());
+			result.put("message", messageService.getMessage(Message.ERROR));
 			result.put("isSuccess", isSuccess);
 		}
 		return result;
