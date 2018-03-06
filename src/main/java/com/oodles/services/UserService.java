@@ -68,6 +68,7 @@ public class UserService
        // usr.setDob(user.getDob());
         usr.setGender(user.getGender());
         usr.setPhoneNumber(user.getPhoneNumber());
+        usr.setPassword(user.getPassword());
         userRepository.save(usr);
         
        

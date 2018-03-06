@@ -9,8 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import com.oodles.domain.UserAddress;
+import com.oodles.annotations.ContactNumberConstraint;
+import com.oodles.annotations.EmailConstraint;
+import com.oodles.annotations.PasswordConstraint;
 import com.oodles.domain.Role;
 
 @Entity
@@ -20,12 +24,18 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotNull
 	private String name;
 	
+	//@NotNull
+	@EmailConstraint
 	private String email;
 	
+	@PasswordConstraint
 	private String password;
 	
+	//@NotNull
+	@ContactNumberConstraint
 	private String phoneNumber;
 	
 	//private Date dob;
