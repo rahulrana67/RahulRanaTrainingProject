@@ -9,7 +9,11 @@ public class URLMapping
 	public static final String ADD_USER = ACCOUNTS_API_V1 +"/add_user";
 	public static final String GET_USER = ACCOUNTS_API_V1 +"/get_user";
 	public static final String UPDATE_USER=ACCOUNTS_API_V1+"/update_user";
-	public static final String EDIT_USER_PROFILE=ACCOUNTS_API_V1+"/edit_user";;
+	public static final String EDIT_USER_PROFILE=ACCOUNTS_API_V1+"/edit_user";
+	
+	public static final String REGISTER = ACCOUNTS_API_V1+"/register";
+	
+	public static final String VERIFICATION = ACCOUNTS_API_V1 +"/verification";
 	
 	
 	//EXCHANGE
@@ -30,6 +34,10 @@ public class URLMapping
 
 	public static final String ASSIGN_ACTIVITIES = ACCOUNTS_API_V1+"/assign_activity";
 	public static final String ADD_ACTIVITY=ACCOUNTS_API_V1+"/add_activity";
+
+
+
+
 	
 	
 }

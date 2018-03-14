@@ -44,10 +44,39 @@ public class User {
 	
 	private String gender;
 	
+	private String confirmationToken;
+	
+	
+	private Boolean EmailVerified=false;
+
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_Address_id")
 	private UserAddress userAddress;
+		
+	
+	public String getConfirmationToken() {
+		return confirmationToken;
+	}
+
+	public void setConfirmationToken(String confirmationToken) {
+		this.confirmationToken = confirmationToken;
+	}
+
+	
+	
+	
+	
+	
+	
+	public Boolean getEmailVerified() {
+		return EmailVerified;
+	}
+
+	public void setEmailVerified(Boolean emailVerified) {
+		EmailVerified = emailVerified;
+	}
+	
 	
 	public UserAddress getUserAddress() {
 		return userAddress;

@@ -102,6 +102,28 @@ public class ResponseHandler {
 			return new ResponseEntity<Object>(map,status);
 		}
 	}
+	
+	public static ResponseEntity<Object> generateVerificationResponse(HttpStatus stat, boolean error,
+			String msg) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			map.put("timeStamp", new Date());
+			map.put("status", stat.value());
+			map.put("isSuccess", error);
+			map.put("message", msg);
+
+			return new ResponseEntity<Object>(map, stat);
+		} catch (Exception e) {
+			map.clear();
+			map.put("timeStamp", new Date());
+			map.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+			map.put("isSuccess", false);
+			map.put("message", e.getMessage());
+			map.put("data", null);
+			return new ResponseEntity<Object>(map, stat);
+		}
+	}
+	
 	public static ResponseEntity<Object> verifyResponse(HttpStatus status, boolean error,String message,Object json) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
